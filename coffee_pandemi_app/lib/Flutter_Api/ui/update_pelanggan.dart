@@ -2,7 +2,7 @@ import 'package:coffee_pandemi_app/Flutter_Api/model/pelanggan.dart';
 import 'package:coffee_pandemi_app/Flutter_Api/server/api.dart';
 
 import 'package:flutter/material.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -14,12 +14,15 @@ class UpdatePelanggan extends StatefulWidget {
 }
 
 class _UpdatePelangganState extends State<UpdatePelanggan> {
+  String _valuegender = 'Laki-laki';
+  List<String> _items = ['Laki-laki', 'Perempuan'];
+
   var _controllerNama = TextEditingController();
 
   var _controllerEmail = TextEditingController();
 
   var _controllerTotal = TextEditingController();
-  var _gender = '';
+  var _controllerFoto = TextEditingController();
 
   void updateNewPelanggan() async {
     // var url = 'http://192.168.1.2/db_coffee_api/update_pelanggan.php';
@@ -29,7 +32,8 @@ class _UpdatePelangganState extends State<UpdatePelanggan> {
         'nama': _controllerNama.text,
         'email': _controllerEmail.text,
         'total': _controllerTotal.text,
-        'gender': _gender,
+        'foto': _controllerFoto.text,
+        'gender': _valuegender,
       });
       if (response.statusCode == 200) {
         var responseBody = json.decode(response.body);
@@ -49,7 +53,8 @@ class _UpdatePelangganState extends State<UpdatePelanggan> {
     _controllerNama.text = widget.pelanggan.nama;
     _controllerEmail.text = widget.pelanggan.email;
     _controllerTotal.text = widget.pelanggan.total;
-    _gender = widget.pelanggan.gender;
+    _controllerFoto.text = widget.pelanggan.foto;
+    _valuegender = widget.pelanggan.gender;
     super.initState();
   }
 
@@ -97,23 +102,30 @@ class _UpdatePelangganState extends State<UpdatePelanggan> {
                   labelText: 'Price Coffe Shopping'),
             ),
           ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Text("Gender :"),
-              Text(_gender),
-            ],
-          ),
           SizedBox(height: 8),
-          RadioButtonGroup(
-            labels: <String>[
-              "Perempuan",
-              "Laki-laki",
-            ],
-            onSelected: (String selected) {
-              _gender = selected;
-              print(_gender);
-            },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: TextFormField(
+              controller: _controllerFoto,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                  isDense: true,
+                  border: OutlineInputBorder(),
+                  labelText: 'Image'),
+            ),
+          ),
+          SizedBox(height: 16),
+          Text("Gender : "),
+          SizedBox(height: 8),
+          RadioGroup<String>.builder(
+            groupValue: _valuegender,
+            onChanged: (value) => setState(() {
+              _valuegender = value;
+            }),
+            items: _items,
+            itemBuilder: (item) => RadioButtonBuilder(
+              item,
+            ),
           ),
           RaisedButton(
             onPressed: () {

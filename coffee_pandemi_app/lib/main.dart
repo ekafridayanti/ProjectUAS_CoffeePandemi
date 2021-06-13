@@ -1,5 +1,8 @@
 import 'package:coffee_pandemi_app/Flutter_Api/ui/list_pelanggan.dart';
+import 'package:coffee_pandemi_app/about_app.dart';
+import 'package:coffee_pandemi_app/login/login_user.dart';
 import 'package:coffee_pandemi_app/penjualan_coffee/list_penjualan.dart';
+import 'package:coffee_pandemi_app/wishlist/list_wishlist.dart';
 import 'package:flutter/material.dart';
 //import halaman yang akan diload kemusian beri alias
 import './home_page.dart';
@@ -12,12 +15,14 @@ void main() {
     title: "tab Bar",
     debugShowCheckedModeBanner: false,
     theme: ThemeData(primarySwatch: Colors.brown),
-    home: new MyApp(),
+    home: new Login(),
   ));
 }
 
 //menggunakan StatefulWidget
 class MyApp extends StatefulWidget {
+  final String id_user;
+  const MyApp({Key key, this.id_user}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -29,25 +34,38 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   List<Map> _listNav = [
     {'icon': Icons.home, 'label': 'Home'},
     {'icon': Icons.list, 'label': 'List'},
-    {'icon': Icons.shopping_cart, 'label': 'Cart'},
     {'icon': Icons.add_chart, 'label': 'Penjualan'},
     {'icon': Icons.add_box, 'label': 'Pelanggan'},
+  ];
+  List<String> _listTitle = [
+    'Pandemi Coffee',
+    'List Coffee',
+    'List Penjualan',
+    'Daftar Pelanggan'
   ];
   List<Widget> _listPage = [
     HomePage(),
     ListCoffeePage(),
-    ListCart(),
     Home(),
     ListPelanggan(),
   ];
 
   // TabController controller;
   // //tambah initState unutk inisialisasi dan mengaktifkan tab
-  // @override
-  // void initState() {
-  //   controller = new TabController(length: 2, vsync: this);
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // controller = new TabController(length: 2, vsync: this);
+    // _listPage = [
+    //   HomePage(
+    //     id_user: widget.id_user,
+    //   ),
+    //   ListCoffeePage(),
+    //   ListCart(),
+    //   Home(),
+    //   ListPelanggan(),
+    // ];
+    super.initState();
+  }
 
   // //tambah dispose unutk berpindah halaman
   // @override
@@ -58,8 +76,130 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var keyScaffold = GlobalKey<ScaffoldState>();
     //gunakan widget Scaffold
     return Scaffold(
+      key: keyScaffold,
+      appBar: AppBar(
+        backgroundColor: Color(0xFFDAB68C),
+        leading: _currentIndex == 0
+            ? IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: Colors.brown,
+                ),
+                onPressed: () {
+                  keyScaffold.currentState.openDrawer();
+                })
+            : SizedBox(),
+        centerTitle: true,
+        title: Text(
+          _listTitle[_currentIndex],
+          style: TextStyle(color: Colors.brown),
+        ),
+        actions: [
+          _currentIndex == 0
+              ? IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.brown,
+                  ),
+                  onPressed: () {
+                    print('click start');
+                  },
+                )
+              : SizedBox(),
+          _currentIndex == 0
+              ? IconButton(
+                  icon: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.brown,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ListCart()));
+                  },
+                )
+              : SizedBox(),
+
+          // _currentIndex == 0
+          //     ? IconButton(
+          //         icon: Icon(
+          //           Icons.notifications_active,
+          //           color: Colors.brown,
+          //         ),
+          //         onPressed: () {
+          //           print('click start');
+          //         },
+          //       )
+          //     : SizedBox(),
+        ],
+      ),
+
+      //drawer profil user
+      drawer: new Drawer(
+        child: new ListView(
+          children: [
+            new UserAccountsDrawerHeader(
+              accountName: new Text("Eka Fridayanti"),
+              accountEmail: new Text("eka.fridayanti@undiksha.ac.id"),
+              currentAccountPicture: new GestureDetector(
+                onTap: () {},
+                child: new CircleAvatar(
+                  backgroundImage: new NetworkImage(
+                      'https://lh3.google.com/u/0/ogw/ADGmqu-qwOpGhSR6gTBNMjf4Cux9_s6H92scDh-nLouB=s192-c-mo'),
+                ),
+              ),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/profilebg.jpg'),
+                    fit: BoxFit.cover),
+              ),
+            ),
+            new ListTile(
+              title: new Text('About'),
+              trailing: new Icon(Icons.info_outline_rounded),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AboutApp()));
+              },
+            ),
+            new ListTile(
+              title: new Text('Notifications'),
+              trailing: new Icon(
+                Icons.notifications_none,
+              ),
+              onTap: () {
+                print("Click Start");
+              },
+            ),
+            new ListTile(
+              title: new Text('Wishlist'),
+              trailing: new Icon(Icons.favorite),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListWishlist()));
+                print("Click Start");
+              },
+            ),
+            new ListTile(
+              title: new Text('Account'),
+              trailing: new Icon(Icons.verified_user),
+              onTap: () {
+                print("Click Start");
+              },
+            ),
+            new ListTile(
+              title: new Text('Setting'),
+              trailing: new Icon(Icons.settings),
+              onTap: () {
+                print("click");
+              },
+            ),
+          ],
+        ),
+      ),
+
       body: _listPage[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Color(0xFFDAB68C),

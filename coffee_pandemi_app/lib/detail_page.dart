@@ -1,10 +1,16 @@
+import 'dart:convert';
+
+import 'package:coffee_pandemi_app/Flutter_Api/server/Api.dart';
 import 'package:coffee_pandemi_app/database/cart/db_helper.dart';
 import 'package:coffee_pandemi_app/list_cart.dart';
+import 'package:coffee_pandemi_app/wishlist/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:coffee_pandemi_app/coffee.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart' as http;
 
 class DetailMenu extends StatefulWidget {
+  // final String id_user;
   final Coffee coffee;
   DetailMenu({this.coffee});
   @override
@@ -13,6 +19,83 @@ class DetailMenu extends StatefulWidget {
 
 class _DetailMenuState extends State<DetailMenu> {
   //inisialisasi variabel star
+  bool isWishlist = false;
+
+  void checkWishlist() async {
+    String idUser = await Prefs.getIdUser();
+    print(
+        '------------------------------------------------------CHECK WISHLIST');
+    print('PRINT ID USER: $idUser');
+    // String url = 'http://192.168.1.2/db_coffee_api/get_list_pelanggan.php';
+    try {
+      var response = await http.post(Api.urlCheckWishlist, body: {
+        'id_user': idUser,
+        'name': widget.coffee.name,
+      });
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(response.body);
+
+        if (responseBody['succes']) {
+          setState(() {
+            isWishlist = true;
+          });
+        } else {
+          setState(() {
+            isWishlist = false;
+          });
+        }
+      } else {
+        print('Request Error');
+      }
+    } catch (e) {}
+
+    setState(() {});
+  }
+
+  void addWishlist() async {
+    String idUser = await Prefs.getIdUser();
+    Coffee coffee = widget.coffee;
+    coffee.idUser = int.parse(idUser.toString());
+    // print(coffee.toWishlist());
+    try {
+      var response =
+          await http.post(Api.urlAddWishlist, body: coffee.toWishlist());
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(response.body);
+
+        if (responseBody['succes']) {
+          print('berhasil add');
+        } else {
+          print('gagal add');
+        }
+      } else {
+        print('Request Error');
+      }
+      checkWishlist();
+    } catch (e) {
+      print('e : $e');
+    }
+  }
+
+  void deleteWishlist() async {
+    String idUser = await Prefs.getIdUser();
+
+    // String url = 'http://192.168.1.2/db_coffee_api/get_list_pelanggan.php';
+    try {
+      await http.post(Api.urlDeleteWishlist, body: {
+        'id_user': idUser,
+        'name': widget.coffee.name,
+      });
+      checkWishlist();
+    } catch (e) {}
+  }
+
+  @override
+  void initState() {
+    checkWishlist();
+    super.initState();
+  }
+
   int jumlah = 1;
   @override
   Widget build(BuildContext context) {
@@ -27,6 +110,19 @@ class _DetailMenuState extends State<DetailMenu> {
           style: TextStyle(color: Colors.brown),
         ),
         actions: [
+          IconButton(
+            icon: Icon(
+              isWishlist ? Icons.favorite : Icons.favorite_border,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              if (isWishlist) {
+                deleteWishlist();
+              } else {
+                addWishlist();
+              }
+            },
+          ),
           IconButton(
             icon: Icon(
               Icons.shopping_cart,

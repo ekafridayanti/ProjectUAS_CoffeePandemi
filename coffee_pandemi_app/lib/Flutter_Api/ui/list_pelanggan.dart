@@ -64,83 +64,79 @@ class _ListPelangganState extends State<ListPelanggan> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Daftar Customer Pandemi Coffee'),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                getListPelanggan();
-              })
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        // backgroundColor: Colors.amber,
-        // foregroundColor: Colors.black,
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddPelanggan()),
-          ).then((value) => getListPelanggan());
-        },
-      ),
-      body: _listPelanggan.length > 0
-          ? ListView.builder(
-              itemCount: _listPelanggan.length,
-              itemBuilder: (context, index) {
-                Pelanggan pelanggan = _listPelanggan[index];
-                return ListTile(
-                  leading: Image.network(
-                    pelanggan.foto,
-                    width: 80,
-                    height: 120,
-                    fit: BoxFit.cover,
-                  ),
-                  title: Text(
-                    pelanggan.nama,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.brown[900]),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Rp" + pelanggan.total),
-                      Text(pelanggan.gender)
-                    ],
-                  ),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UpdatePelanggan(
-                              pelanggan: pelanggan,
-                            )),
-                  ).then((value) => getListPelanggan()),
-                  trailing: Material(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.brown,
-                    child: InkWell(
-                      onTap: () {
-                        deletePelanggan(pelanggan.id);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.delete,
-                          color: Colors.white,
+    return Stack(
+      children: [
+        _listPelanggan.length > 0
+            ? ListView.builder(
+                itemCount: _listPelanggan.length,
+                itemBuilder: (context, index) {
+                  Pelanggan pelanggan = _listPelanggan[index];
+                  return ListTile(
+                    leading: Image.network(
+                      pelanggan.foto,
+                      width: 80,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text(
+                      pelanggan.nama,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.brown[900]),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Rp" + pelanggan.total),
+                        Text(pelanggan.gender)
+                      ],
+                    ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpdatePelanggan(
+                                pelanggan: pelanggan,
+                              )),
+                    ).then((value) => getListPelanggan()),
+                    trailing: Material(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.brown,
+                      child: InkWell(
+                        onTap: () {
+                          deletePelanggan(pelanggan.id);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
-            )
-          : Center(
-              child: Text('Silahkan Tambah Data!'),
-            ),
+                  );
+                },
+              )
+            : Center(
+                child: Text('Silahkan Tambah Data!'),
+              ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton(
+            // backgroundColor: Colors.amber,
+            // foregroundColor: Colors.black,
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddPelanggan()),
+              ).then((value) => getListPelanggan());
+            },
+          ),
+        )
+      ],
     );
   }
 }

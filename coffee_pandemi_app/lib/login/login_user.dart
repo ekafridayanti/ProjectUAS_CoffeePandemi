@@ -4,6 +4,7 @@ import 'package:coffee_pandemi_app/Flutter_Api/server/Api.dart';
 import 'package:coffee_pandemi_app/login/flutter_coffee_login_u_i_icons.dart';
 import 'package:coffee_pandemi_app/login/register_user.dart';
 import 'package:coffee_pandemi_app/main.dart';
+import 'package:coffee_pandemi_app/wishlist/prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +17,7 @@ class _LoginState extends State<Login> {
   var _controllerUsername = TextEditingController();
   var _controllerPassword = TextEditingController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
   void loginUser() async {
     try {
       var response = await http.post(Api.urlLogin, body: {
@@ -26,8 +28,14 @@ class _LoginState extends State<Login> {
         var responseBody = json.decode(response.body);
         if (responseBody['succes']) {
           print('Berhasil');
+          var data = responseBody['data'];
+          Prefs.saveIdUser(data['id']);
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MyApp()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyApp(
+                        id_user: data['id'],
+                      )));
         } else {
           print('Gagal');
           scaffoldKey.currentState.showSnackBar(
@@ -55,8 +63,7 @@ class _LoginState extends State<Login> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(
-                          './assets/images/jakub-dziubak-unsplash.jpg'),
+                      image: AssetImage('./assets/images/coffee2.jpg'),
                       fit: BoxFit.cover),
                 ),
               ),
@@ -148,6 +155,7 @@ class _LoginState extends State<Login> {
                                     // Can you figure out how to obscure the password text
                                     // with the eye icon as a toggle?
                                     child: TextField(
+                                      obscureText: true,
                                       controller: _controllerPassword,
                                       decoration: InputDecoration(
                                           hintText: 'Password',

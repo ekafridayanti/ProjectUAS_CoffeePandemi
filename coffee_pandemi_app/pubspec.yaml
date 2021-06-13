@@ -37,6 +37,9 @@ dependencies:
   intl: ^0.15.7
   datetime_picker_formfield: ^1.0.0
   http: ^0.12.2
+  group_radio_button: ^1.0.1
+  google_fonts: ^1.0.0
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +72,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: FlutterCoffeeLoginUI
+      fonts:
+        - asset: assets/fonts/FlutterCoffeeLoginUI.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

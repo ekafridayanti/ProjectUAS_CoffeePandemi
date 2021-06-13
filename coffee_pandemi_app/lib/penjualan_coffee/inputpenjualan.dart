@@ -29,21 +29,24 @@ class _InputPenjualanState extends State<InputPenjualan> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFDAB68C),
-        title: penjualan == null
-            ? Text(
-                "Transaksi Baru",
-                style: TextStyle(color: Colors.brown),
-              )
-            : Text(
-                "Update Transaksi",
-                style: TextStyle(color: Colors.brown),
+          backgroundColor: Color(0xFFDAB68C),
+          title: penjualan == null
+              ? Text(
+                  "Transaksi Baru",
+                  style: TextStyle(color: Colors.brown),
+                )
+              : Text(
+                  "Update Transaksi",
+                  style: TextStyle(color: Colors.brown),
+                ),
+          leading: IconButton(
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                color: Colors.brown,
               ),
-        leading: Icon(
-          Icons.keyboard_arrow_left,
-          color: Colors.brown,
-        ),
-      ),
+              onPressed: () {
+                Navigator.pop(context);
+              })),
       body: Padding(
         padding:
             EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0, bottom: 10.0),

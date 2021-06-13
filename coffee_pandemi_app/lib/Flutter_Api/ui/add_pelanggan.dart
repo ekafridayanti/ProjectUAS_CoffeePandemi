@@ -1,15 +1,28 @@
 import 'package:coffee_pandemi_app/Flutter_Api/server/api.dart';
 
 import 'package:flutter/material.dart';
+import 'package:group_radio_button/group_radio_button.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AddPelanggan extends StatelessWidget {
+class AddPelanggan extends StatefulWidget {
+  @override
+  _AddPelangganState createState() => _AddPelangganState();
+}
+
+class _AddPelangganState extends State<AddPelanggan> {
+  String _valuegender = 'Laki-laki';
+
+  List<String> _items = ['Laki-laki', 'Perempuan'];
+
   var _controllerNama = TextEditingController();
+
   var _controllerEmail = TextEditingController();
+
   var _controllerTotal = TextEditingController();
-  var _gender = '';
+
+  var _controllerFoto = TextEditingController();
 
   void addNewPelanggan() async {
     // var url = '${Api.server}/add_pelanggan.php';
@@ -18,7 +31,8 @@ class AddPelanggan extends StatelessWidget {
         'nama': _controllerNama.text,
         'email': _controllerEmail.text,
         'total': _controllerTotal.text,
-        'gender': _gender,
+        'foto': _controllerFoto.text,
+        'gender': _valuegender,
       });
       if (response.statusCode == 200) {
         var responseBody = json.decode(response.body);
@@ -75,18 +89,32 @@ class AddPelanggan extends StatelessWidget {
                   labelText: 'Price Coffee Shopping'),
             ),
           ),
+          SizedBox(
+            height: 8,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: TextFormField(
+              controller: _controllerFoto,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                  isDense: true,
+                  border: OutlineInputBorder(),
+                  labelText: 'Image'),
+            ),
+          ),
           SizedBox(height: 8),
           Text("Gender"),
           SizedBox(height: 8),
-          RadioButtonGroup(
-            labels: <String>[
-              "Perempuan",
-              "Laki-laki",
-            ],
-            onSelected: (String selected) {
-              _gender = selected;
-              print(_gender);
-            },
+          RadioGroup<String>.builder(
+            groupValue: _valuegender,
+            onChanged: (value) => setState(() {
+              _valuegender = value;
+            }),
+            items: _items,
+            itemBuilder: (item) => RadioButtonBuilder(
+              item,
+            ),
           ),
           SizedBox(height: 8),
           RaisedButton(

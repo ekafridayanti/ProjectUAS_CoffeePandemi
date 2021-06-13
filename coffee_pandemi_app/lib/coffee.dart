@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'package:coffee_pandemi_app/database/cart/db_helper.dart';
 
 class Coffee {
@@ -9,25 +8,41 @@ class Coffee {
   final String image;
   final double star;
   final int jumlah;
+  int idUser;
+  int idWishlist;
 
-  Coffee({
-    this.id,
-    this.name,
-    this.desc,
-    this.price,
-    this.image,
-    this.star,
-    this.jumlah,
-  });
+  Coffee(
+      {this.id,
+      this.name,
+      this.desc,
+      this.price,
+      this.image,
+      this.star,
+      this.jumlah,
+      this.idUser,
+      this.idWishlist});
+
   factory Coffee.fromMap(Map<String, dynamic> map) {
     return Coffee(
-        id: map[DbHelper.COLUMN_ID],
+        id: int.parse(map[DbHelper.COLUMN_ID].toString()),
         name: map[DbHelper.COLUMN_NAME],
         desc: map[DbHelper.COLUMN_DESC],
-        price: map[DbHelper.COLUMN_PRICE],
+        price: int.parse(map[DbHelper.COLUMN_PRICE].toString()),
         image: map[DbHelper.COLUMN_IMAGE],
-        star: map[DbHelper.COLUMN_STAR],
-        jumlah: map[DbHelper.COLUMN_JUMLAH]);
+        star: double.parse(map[DbHelper.COLUMN_STAR].toString()),
+        jumlah: int.parse(map[DbHelper.COLUMN_JUMLAH].toString()));
+  }
+
+  factory Coffee.fromWishlist(Map<String, dynamic> map) {
+    return Coffee(
+        name: map['name'],
+        desc: map['description'],
+        price: int.parse(map['price'].toString()),
+        image: map['image'],
+        star: double.parse(map['star'].toString()),
+        idUser: int.parse(map['id_user'].toString()),
+        idWishlist: int.parse(map['id_wishlist'].toString()),
+        jumlah: int.parse(map['jumlah'].toString()));
   }
 
   Map<String, dynamic> toMap() {
@@ -38,6 +53,18 @@ class Coffee {
       DbHelper.COLUMN_IMAGE: this.image,
       DbHelper.COLUMN_STAR: this.star,
       DbHelper.COLUMN_JUMLAH: this.jumlah,
+    };
+  }
+
+  Map<String, dynamic> toWishlist() {
+    return {
+      'name': this.name,
+      'description': this.desc,
+      'price': this.price.toString(),
+      'image': this.image,
+      'star': this.star.toString(),
+      'jumlah': this.jumlah.toString(),
+      'id_user': this.idUser.toString(),
     };
   }
 }

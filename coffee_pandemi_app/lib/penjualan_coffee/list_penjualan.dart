@@ -19,31 +19,26 @@ class _HomeState extends State<Home> {
     if (penjualanList == null) {
       penjualanList = List<Penjualan>();
     }
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFDAB68C),
-        title: Text(
-          'List Data Penjualan Coffee',
-          style: TextStyle(color: Colors.brown),
-        ),
-        leading: Icon(
-          Icons.wifi,
-          color: Colors.brown,
-        ),
-      ),
-      body: createListView(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.brown,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        tooltip: 'Input Penjualan',
-        onPressed: () async {
-          var penjualan = await navigateToEntryForm(context, null);
-          if (penjualan != null) addPenjualan(penjualan);
-        },
-      ),
+    return Stack(
+      children: [
+        createListView(),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton(
+            backgroundColor: Colors.brown,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            tooltip: 'Input Penjualan',
+            onPressed: () async {
+              var penjualan = await navigateToEntryForm(context, null);
+              if (penjualan != null) addPenjualan(penjualan);
+            },
+          ),
+        )
+      ],
     );
   }
 

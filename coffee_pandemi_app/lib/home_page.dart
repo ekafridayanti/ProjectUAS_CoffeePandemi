@@ -1,6 +1,7 @@
 import 'package:coffee_pandemi_app/about_app.dart';
 import 'package:coffee_pandemi_app/detail_page.dart';
 import 'package:coffee_pandemi_app/list_coffee_page.dart';
+import 'package:coffee_pandemi_app/wishlist/list_wishlist.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,285 +10,173 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var keyScaffold = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: keyScaffold,
-      appBar: AppBar(
-        backgroundColor: Color(0xFFDAB68C),
-        leading: IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.brown,
+    return ListView(
+      children: [
+        // Padding(
+        //   padding: const EdgeInsets.only(right: 45.0, left: 20.0),
+        //   child: Text(
+        //     "Welcome to Pandemi Coffee",
+        //     style: TextStyle(
+        //         fontSize: 25.0,
+        //         fontWeight: FontWeight.bold,
+        //         color: Color(0xFF473D3A)),
+        //   ),
+        // ),
+        SizedBox(height: 8.0),
+        Padding(
+          padding: const EdgeInsets.only(right: 45.0, left: 20.0),
+          child: Container(
+            child: Text(
+              'Let\'s select the best taste for your next coffee break!',
+              style: TextStyle(
+                fontFamily: 'nunito',
+                fontSize: 17.0,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFFB0AAA7),
+              ),
             ),
-            onPressed: () {
-              keyScaffold.currentState.openDrawer();
-            }),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Pandemi Coffee',
-              style: TextStyle(color: Colors.brown),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.brown,
-            ),
-            onPressed: () {
-              print('click start');
-            },
           ),
-          IconButton(
-            icon: Icon(
-              Icons.notifications_active,
-              color: Colors.brown,
-            ),
-            onPressed: () {
-              print('click start');
-            },
-          ),
-        ],
-      ),
-
-      //drawer profil user
-      drawer: new Drawer(
-        child: new ListView(
-          children: [
-            new UserAccountsDrawerHeader(
-              accountName: new Text("Eka Fridayanti"),
-              accountEmail: new Text("eka.fridayanti@undiksha.ac.id"),
-              currentAccountPicture: new GestureDetector(
-                onTap: () {},
-                child: new CircleAvatar(
-                  backgroundImage: new NetworkImage(
-                      'https://lh3.google.com/u/0/ogw/ADGmqu-qwOpGhSR6gTBNMjf4Cux9_s6H92scDh-nLouB=s192-c-mo'),
-                ),
-              ),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/profilebg.jpg'),
-                    fit: BoxFit.cover),
-              ),
-            ),
-            new ListTile(
-              title: new Text('About'),
-              trailing: new Icon(Icons.info_outline_rounded),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AboutApp()));
-              },
-            ),
-            new ListTile(
-              title: new Text('Notifications'),
-              trailing: new Icon(
-                Icons.notifications_none,
-              ),
-              onTap: () {
-                print("Click Start");
-              },
-            ),
-            new ListTile(
-              title: new Text('Wishlist'),
-              trailing: new Icon(Icons.bookmark_border),
-              onTap: () {
-                print("Click Start");
-              },
-            ),
-            new ListTile(
-              title: new Text('Account'),
-              trailing: new Icon(Icons.verified_user),
-              onTap: () {
-                print("Click Start");
-              },
-            ),
-            new ListTile(
-              title: new Text('Setting'),
-              trailing: new Icon(Icons.settings),
-              onTap: () {
-                print("click");
-              },
-            ),
-          ],
         ),
-      ),
-
-      //membuat body listview
-      body: Container(
-        child: ListView(
-          children: [
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 45.0, left: 20.0),
-            //   child: Text(
-            //     "Welcome to Pandemi Coffee",
-            //     style: TextStyle(
-            //         fontSize: 25.0,
-            //         fontWeight: FontWeight.bold,
-            //         color: Color(0xFF473D3A)),
-            //   ),
-            // ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.only(right: 45.0, left: 20.0),
-              child: Container(
-                child: Text(
-                  'Let\'s select the best taste for your next coffee break!',
-                  style: TextStyle(
-                    fontFamily: 'nunito',
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w300,
-                    color: Color(0xFFB0AAA7),
-                  ),
-                ),
-              ),
+        SizedBox(height: 8.0),
+        Container(
+          height: 250,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage('assets/images/header1.jpeg'),
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 8.0),
-            Container(
-              height: 250,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/header1.jpeg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 16, right: 16),
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+          ),
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(left: 16, right: 16),
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Caramel Latte',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(Icons.star, color: Colors.orange),
+                          Icon(Icons.star, color: Colors.orange),
+                          Icon(Icons.star, color: Colors.orange),
+                          Spacer(),
                           Text(
-                            'Caramel Latte',
+                            'Rp. 20.000',
                             style: TextStyle(
-                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 25),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.star, color: Colors.orange),
-                              Icon(Icons.star, color: Colors.orange),
-                              Icon(Icons.star, color: Colors.orange),
-                              Spacer(),
-                              Text(
-                                'Rp. 20.000',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25.0,
-                                    color: Colors.orangeAccent),
-                              ),
-                            ],
+                                fontSize: 25.0,
+                                color: Colors.orangeAccent),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Categories',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                  Text('All')
                 ],
               ),
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Categories',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      Text('All')
-                    ],
+              SizedBox(height: 8.0),
+              Container(
+                height: 150,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    makeCategory(
+                        image: 'assets/images/late.jpg', title: 'Late'),
+                    makeCategory(
+                        image: 'assets/images/frape.jpg', title: 'Frappe'),
+                    makeCategory(
+                        image: 'assets/images/machiato.jpg', title: 'Machiato'),
+                    makeCategory(
+                        image: 'assets/images/espresso.jpg', title: 'Espreso'),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Best Selling',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
                   ),
-                  SizedBox(height: 8.0),
-                  Container(
-                    height: 150,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        makeCategory(
-                            image: 'assets/images/late.jpg', title: 'Late'),
-                        makeCategory(
-                            image: 'assets/images/frape.jpg', title: 'Frappe'),
-                        makeCategory(
-                            image: 'assets/images/machiato.jpg',
-                            title: 'Machiato'),
-                        makeCategory(
-                            image: 'assets/images/espresso.jpg',
-                            title: 'Espreso'),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Best Selling',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      new GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ListCoffeePage()));
-                        },
-                        child: Text('All'),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  Container(
-                    height: 150,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        makeBestSell(
-                            image: 'assets/images/late1.jpg',
-                            title: 'Vanila Late',
-                            price: 'Rp.20.000'),
-                        makeBestSell(
-                            image: 'assets/images/frape1.jpg',
-                            title: 'Choco Frappe',
-                            price: 'Rp.22.000'),
-                        makeBestSell(
-                            image: 'assets/images/maciato.jpg',
-                            title: 'Machiato Caramel',
-                            price: 'Rp.25.000'),
-                        makeBestSell(
-                            image: 'assets/images/espreso.jpg',
-                            title: 'Espreso',
-                            price: 'Rp.15.000'),
-                      ],
-                    ),
+                  new GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ListCoffeePage()));
+                    },
+                    child: Text('All'),
                   )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
+              SizedBox(height: 8.0),
+              Container(
+                height: 150,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    makeBestSell(
+                        image: 'assets/images/late1.jpg',
+                        title: 'Vanila Late',
+                        price: 'Rp.20.000'),
+                    makeBestSell(
+                        image: 'assets/images/frape1.jpg',
+                        title: 'Choco Frappe',
+                        price: 'Rp.22.000'),
+                    makeBestSell(
+                        image: 'assets/images/maciato.jpg',
+                        title: 'Machiato Caramel',
+                        price: 'Rp.25.000'),
+                    makeBestSell(
+                        image: 'assets/images/espreso.jpg',
+                        title: 'Espreso',
+                        price: 'Rp.15.000'),
+                  ],
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 
